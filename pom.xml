@@ -244,6 +244,7 @@
                 <artifactId>dependency-check-maven</artifactId>
                 <version>12.1.1</version>
                 <configuration>
+                    <!--suppress UnresolvedMavenProperty -->
                     <nvdApiKey>${env.NVD_API_KEY}</nvdApiKey>
                 </configuration>
                 <executions>
@@ -260,6 +261,13 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>3.6.0</version>
+                <configuration>
+                    <failOnViolation>true</failOnViolation>
+                    <violationSeverity>warning</violationSeverity>
+                    <maxAllowedViolations>10</maxAllowedViolations>
+                    <suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation>
+                    <suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
+                </configuration>
             </plugin>
 
             <!-- Surefire Plugin -->
