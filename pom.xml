@@ -265,8 +265,6 @@
                     <failOnViolation>true</failOnViolation>
                     <violationSeverity>warning</violationSeverity>
                     <maxAllowedViolations>10</maxAllowedViolations>
-                    <suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation>
-                    <suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
                 </configuration>
             </plugin>
 
