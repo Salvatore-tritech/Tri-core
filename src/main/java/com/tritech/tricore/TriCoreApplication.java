@@ -6,8 +6,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class TriCoreApplication {
 
-    public static void main(String[] args) {
+    /**
+     * Main method that starts the Spring Boot application.
+     *
+     * @param args command line arguments passed to the application
+     */
+    public static void main(final String[] args) {
         SpringApplication.run(TriCoreApplication.class, args);
     }
-
 }
