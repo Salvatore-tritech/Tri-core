@@ -37,7 +37,12 @@ jobs:
         run: mvn -B checkstyle:check pmd:check spotbugs:check
 
       - name: Build, test & coverage
+        if: ${{ env.DB_STEP_ENABLED == 'true' }}
         run: mvn -B clean verify jacoco:report
+
+      - name: Build only
+        if: ${{ env.DB_STEP_ENABLED != 'true' }}
+        run: mvn -B clean
 
       - name: OWASP Dependency-Check
         run: mvn -B org.owasp:dependency-check-maven:check
