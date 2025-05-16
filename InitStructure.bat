@@ -49,8 +49,10 @@ set "HAS_ERROR=false"
 :: ----------------------------------------------------------------------
 if exist "%SCRIPT_DIR%.env" (
     echo [INFO] Caricamento variabili da .env
-    for /f "tokens=*" %%a in (%SCRIPT_DIR%.env) do (
-        set "%%a"
+    for /f "usebackq tokens=1,* delims==" %%a in ("%SCRIPT_DIR%.env") do (
+        set "KEY=%%a"
+        set "VAL=%%b"
+        set "!KEY!=!VAL!"
     )
 )
 
@@ -107,8 +109,6 @@ exit /b 1
 :: ----------------------------------------------------------------------
 :: Logging functions
 :: ----------------------------------------------------------------------
-call :log "INFO" "Log dettagliato in %LOG_FILE%"
-
 :log
 set "level=%~1"
 set "msg=%~2"
@@ -120,7 +120,7 @@ if "%level%"=="WARN" set "symbol=⚠️ "
 if "%level%"=="ERROR" set "symbol=❌ "
 if "%level%"=="OK" set "symbol=✅ "
 
-echo [%timestamp%] %symbol%%msg% >> "%LOG_FILE%"
+>> "%LOG_FILE%" echo [%timestamp%] %symbol%%msg%
 echo [%level%] %symbol%%msg%
 exit /b 0
 
@@ -194,7 +194,7 @@ set "TEMP_DIR=%TEMP%\docker_install_%TIMESTAMP%"
 mkdir "%TEMP_DIR%" 2>nul
 
 :: URL Docker Desktop
-set "DOCKER_URL=https://desktop.docker.com/win/stable/Docker Desktop Installer.exe"
+set "DOCKER_URL=https://desktop.docker.com/win/stable/Docker%%20Desktop%%20Installer.exe"
 set "DOCKER_INSTALLER=%TEMP_DIR%\DockerDesktopInstaller.exe"
 
 :: Download dell'installer
@@ -390,7 +390,7 @@ for /l %%i in (1, 1, %ATTEMPTS%) do (
         if not defined HEALTH_STATUS set "HEALTH_STATUS="
         if "!HEALTH_STATUS!"=="" (
             :: Nessun healthcheck, usa pg_isready
-            docker exec %PG_CONTAINER% pg_isready -U %DB_USER% >nul 2>nul
+            docker exec "%PG_CONTAINER%" pg_isready -U "%DB_USER%" >nul 2>nul
             if %ERRORLEVEL% EQU 0 set "READY=true"
         ) else if "!HEALTH_STATUS!"=="healthy" (
             set "READY=true"
@@ -494,5 +494,6 @@ exit /b %ERRORLEVEL%
 :: ----------------------------------------------------------------------
 :: Esecuzione script
 :: ----------------------------------------------------------------------
-call :main
+call :log "INFO" "Log dettagliato in %LOG_FILE%"
+goto :main
 endlocal

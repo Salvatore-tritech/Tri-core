@@ -9,25 +9,16 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
-@Table(name = "users")
+@Table(name = "groups")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class Group {
 
     @Id
-    @Column(name = "subject", nullable = false, unique = true)
-    private Long subject;
-
-    @Column(name = "fullname", nullable = false)
-    private String fullname;
-
-    @Column(name = "email", nullable = false)
-    private String email;
-
-    @Column(name = "picture")
-    private String picture;
+    @Column(name = "group_name", nullable = false, unique = true)
+    private String groupName;
 
     // Technical Fields
 
@@ -41,4 +32,5 @@ public class User {
     @Column(name = "updated_at")
     @LastModifiedDate
     private java.time.LocalDateTime updatedAt;
+
 }
