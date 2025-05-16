@@ -1,5 +1,5 @@
 /**
- * Package che contiene le entità di dominio e i value objects che rappresentano
- * i concetti chiave del business domain dell'applicazione.
+ * Package containing domain entities and value objects that represent
+ * the key concepts of the application's business domain.
  */
 package com.tritech.tricore.core.domain;
