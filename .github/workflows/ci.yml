@@ -20,7 +20,7 @@ jobs:
           java-version: "21"
 
       - name: Validate Code Formatting
-        run: mvn spring-javaformat:apply io.spring.javaformat:spring-javaformat-maven-plugin:validate
+        run: mvn io.spring.javaformat:spring-javaformat-maven-plugin:validate
 
   build-and-test:
     needs: code-format
