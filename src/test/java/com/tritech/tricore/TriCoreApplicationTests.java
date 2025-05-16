@@ -14,11 +14,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
 @SpringBootTest
-@EnableAutoConfiguration(exclude = {
-		DataSourceAutoConfiguration.class,
-		HibernateJpaAutoConfiguration.class,
-		CamundaBpmAutoConfiguration.class
-})
+@EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class,
+		CamundaBpmAutoConfiguration.class })
 @ActiveProfiles("test")
 class TriCoreApplicationTests {
 
@@ -29,6 +26,7 @@ class TriCoreApplicationTests {
 
 	@TestConfiguration
 	static class TestConfig {
+
 		@Bean
 		@Primary
 		public PlatformTransactionManager testTransactionManager() {
@@ -39,12 +37,15 @@ class TriCoreApplicationTests {
 		public TransactionTemplate transactionTemplate(PlatformTransactionManager transactionManager) {
 			return new TransactionTemplate(transactionManager);
 		}
+
 	}
 
 	// Mock TransactionManager to resolve transaction-related dependencies
 	static class MockTransactionManager implements PlatformTransactionManager {
+
 		@Override
-		public org.springframework.transaction.TransactionStatus getTransaction(org.springframework.transaction.TransactionDefinition definition) {
+		public org.springframework.transaction.TransactionStatus getTransaction(
+				org.springframework.transaction.TransactionDefinition definition) {
 			return null;
 		}
 
@@ -55,5 +56,7 @@ class TriCoreApplicationTests {
 		@Override
 		public void rollback(org.springframework.transaction.TransactionStatus status) {
 		}
+
 	}
+
 }
