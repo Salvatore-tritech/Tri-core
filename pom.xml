@@ -34,6 +34,7 @@
         <lombok.version>1.18.38</lombok.version>
         <jackson.version>2.18.3</jackson.version>
         <json-smart.version>2.5.2</json-smart.version>
+        <spring-javaformat.version>0.0.41</spring-javaformat.version>
     </properties>
 
     <!-- BOMs for coherent dependency versions -->
@@ -208,14 +209,22 @@
         </repository>
     </repositories>
 
+    <pluginRepositories>
+        <pluginRepository>
+            <id>spring-releases</id>
+            <url>https://repo.spring.io/release</url>
+        </pluginRepository>
+    </pluginRepositories>
+
     <build>
         <plugins>
-            <!-- Github plugin per il caching -->
+            <!-- Github plugin for Spotbugs -->
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
                 <version>4.7.3.6</version>
             </plugin>
+
             <!-- Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -232,12 +241,28 @@
                 </configuration>
             </plugin>
 
+            <!-- Spring Javaformat Plugin -->
+            <plugin>
+                <groupId>io.spring.javaformat</groupId>
+                <artifactId>spring-javaformat-maven-plugin</artifactId>
+                <version>${spring-javaformat.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>validate</goal>
+                            <goal>apply</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!-- Spring Boot Maven Plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
+            <!-- JaCoCo Plugin -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -277,18 +302,6 @@
                 </executions>
             </plugin>
 
-            <!-- Checkstyle Plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.6.0</version>
-                <configuration>
-                    <failOnViolation>true</failOnViolation>
-                    <violationSeverity>warning</violationSeverity>
-                    <maxAllowedViolations>10</maxAllowedViolations>
-                </configuration>
-            </plugin>
-
             <!-- Surefire Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -297,5 +310,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
