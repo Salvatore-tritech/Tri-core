@@ -8,10 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
-@EnableAutoConfiguration(exclude = {
-		DataSourceAutoConfiguration.class,
-		HibernateJpaAutoConfiguration.class
-})
+@EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class })
 @ActiveProfiles("test")
 class TriCoreApplicationTests {
 
@@ -19,4 +16,5 @@ class TriCoreApplicationTests {
 	void contextLoads() {
 		// Empty test method
 	}
+
 }
