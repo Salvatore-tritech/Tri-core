@@ -119,6 +119,9 @@ jobs:
         with:
           languages: java
 
+      - name: Build with Maven for CodeQL
+        run: mvn -B clean compile
+
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
 
