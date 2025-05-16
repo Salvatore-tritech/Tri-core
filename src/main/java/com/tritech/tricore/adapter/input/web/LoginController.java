@@ -10,21 +10,22 @@ import java.io.IOException;
 @Controller
 public class LoginController {
 
-    @Value("${redirect.login.success}")
-    private String redirectUrl;
+	@Value("${redirect.login.success}")
+	private String redirectUrl;
 
-    @GetMapping("/login")
-    public void login(HttpServletResponse response) throws IOException {
-        response.sendRedirect("/oauth2/authorization/google");
-    }
+	@GetMapping("/login")
+	public void login(HttpServletResponse response) throws IOException {
+		response.sendRedirect("/oauth2/authorization/google");
+	}
 
-    @GetMapping("login/success")
-    public void loginSuccess(HttpServletResponse response) throws IOException {
-        response.sendRedirect(redirectUrl);
-    }
+	@GetMapping("login/success")
+	public void loginSuccess(HttpServletResponse response) throws IOException {
+		response.sendRedirect(redirectUrl);
+	}
 
-    @GetMapping("login/fail")
-    public void loginFailed(HttpServletResponse response) throws IOException {
-        response.sendRedirect("http://localhost:3000/login");
-    }
+	@GetMapping("login/fail")
+	public void loginFailed(HttpServletResponse response) throws IOException {
+		response.sendRedirect("http://localhost:3000/login");
+	}
+
 }
