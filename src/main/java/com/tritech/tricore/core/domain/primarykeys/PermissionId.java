@@ -27,7 +27,7 @@ public class PermissionId implements Serializable {
     /**
      * The unique identifier of the user associated with the permission.
      */
-    private Integer subject;
+    private Long subject;
     /**
      * The name of the group associated with the permission.
      */

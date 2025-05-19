@@ -3,6 +3,7 @@ package com.tritech.tricore.core.domain;
 import com.tritech.tricore.core.domain.primarykeys.PermissionId;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Id;
@@ -16,8 +17,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * Represents a permission entity within the system. This class is mapped to the
@@ -52,6 +56,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @IdClass(PermissionId.class)
+@EntityListeners(AuditingEntityListener.class)
 public class Permission {
 
     /**
@@ -64,7 +69,7 @@ public class Permission {
      */
     @Id
     @Column(name = "subject", nullable = false)
-    private Integer subject;
+    private Long subject;
 
     /**
      * Represents the name of the group associated with a permission. This field
@@ -135,6 +140,7 @@ public class Permission {
     @JoinColumn(name = "subject", referencedColumnName = "subject",
             foreignKey = @ForeignKey(name = "fk_permission_user"),
             insertable = false, updatable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     /**
@@ -153,6 +159,9 @@ public class Permission {
      * The association is lazy-loaded, meaning the `GroupLevel` entity data is
      * fetched from the database only when it is explicitly accessed. This
      * improves performance by reducing unnecessary database operations.
+     * <p>
+     * If a GroupLevel in the `GroupLevel` entity is deleted, all associated
+     * Permission will be automatically deleted in cascade.
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns(value = {
@@ -163,6 +172,7 @@ public class Permission {
                     referencedColumnName = "level_name",
                     insertable = false, updatable = false)
     }, foreignKey = @ForeignKey(name = "fk_permission_group_level"))
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private GroupLevel groupLevel;
 
 }
