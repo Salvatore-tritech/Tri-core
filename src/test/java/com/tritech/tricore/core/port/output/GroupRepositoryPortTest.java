@@ -28,207 +28,203 @@ import static org.junit.jupiter.api.Assertions.*;
 @Import(TestJpaConfig.class)
 class GroupRepositoryPortTest {
 
-    @Autowired
-    private GroupRepositoryPort groupRepositoryPort;
+	@Autowired
+	private GroupRepositoryPort groupRepositoryPort;
 
-    @PersistenceContext
-    private EntityManager entityManager;
+	@PersistenceContext
+	private EntityManager entityManager;
 
-    @BeforeEach
-    void cleanDatabase() {
-        groupRepositoryPort.deleteAll();
-    }
+	@BeforeEach
+	void cleanDatabase() {
+		groupRepositoryPort.deleteAll();
+	}
 
-    @Nested
-    class IntegrityConstraintTest {
+	@Nested
+	class IntegrityConstraintTest {
 
-        @Test
-        void testGroupNameCannotBeNull() {
-            Group group = Group.builder().build(); // manca groupName
+		@Test
+		void testGroupNameCannotBeNull() {
+			Group group = Group.builder().build(); // manca groupName
 
-            Exception exception = assertThrows(JpaSystemException.class, () -> {
-                groupRepositoryPort.saveAndFlush(Group.builder().build());
-            });
-        }
+			Exception exception = assertThrows(JpaSystemException.class, () -> {
+				groupRepositoryPort.saveAndFlush(Group.builder().build());
+			});
+		}
 
-        @Test
-        void testGroupNameUniqueness() {
-            Group g1 = Group.builder().groupName("admin").build();
-            Group g2 = Group.builder().groupName("admin").build(); // stesso
-            // nome
+		@Test
+		void testGroupNameUniqueness() {
+			Group g1 = Group.builder().groupName("admin").build();
+			Group g2 = Group.builder().groupName("admin").build(); // stesso
+			// nome
 
-            groupRepositoryPort.save(g1);
-            assertThrows(DataIntegrityViolationException.class, () -> {
-                groupRepositoryPort.saveAndFlush(g2);
-            });
-        }
-    }
+			groupRepositoryPort.save(g1);
+			assertThrows(DataIntegrityViolationException.class, () -> {
+				groupRepositoryPort.saveAndFlush(g2);
+			});
+		}
 
-    @Nested
-    class CrudTest {
-        @Test
-        void testSaveAndRetrieveGroup() {
-            // Preparazione: creo un oggetto Group
-            Group group = Group.builder()
-                    .groupName("admin")
-                    .build();
+	}
 
-            // Azione: salvo il gruppo nel database
-            Group savedGroup = groupRepositoryPort.save(group);
+	@Nested
+	class CrudTest {
 
-            // Verifica: controllo che il gruppo sia stato salvato correttamente
-            assertNotNull(savedGroup);
-            assertEquals("admin", savedGroup.getGroupName());
+		@Test
+		void testSaveAndRetrieveGroup() {
+			// Preparazione: creo un oggetto Group
+			Group group = Group.builder().groupName("admin").build();
 
-            // Azione: recupero il gruppo dal database
-            Optional<Group> retrievedGroupOpt = groupRepositoryPort.findById(
-                    "admin");
+			// Azione: salvo il gruppo nel database
+			Group savedGroup = groupRepositoryPort.save(group);
 
-            // Verifica: controllo che il gruppo sia stato recuperato
-            // correttamente
-            assertTrue(retrievedGroupOpt.isPresent());
-            Group retrievedGroup = retrievedGroupOpt.get();
-            assertEquals("admin", retrievedGroup.getGroupName());
-            assertNotNull(retrievedGroup.getCreatedAt());
-        }
+			// Verifica: controllo che il gruppo sia stato salvato correttamente
+			assertNotNull(savedGroup);
+			assertEquals("admin", savedGroup.getGroupName());
 
-        @Test
-        void testFindAllGroups() {
-            // Preparazione: creo e salvo più gruppi
+			// Azione: recupero il gruppo dal database
+			Optional<Group> retrievedGroupOpt = groupRepositoryPort.findById("admin");
 
-            Group group1 = Group.builder().groupName("admin").build();
-            Group group2 = Group.builder().groupName("user").build();
-            Group group3 = Group.builder().groupName("guest").build();
+			// Verifica: controllo che il gruppo sia stato recuperato
+			// correttamente
+			assertTrue(retrievedGroupOpt.isPresent());
+			Group retrievedGroup = retrievedGroupOpt.get();
+			assertEquals("admin", retrievedGroup.getGroupName());
+			assertNotNull(retrievedGroup.getCreatedAt());
+		}
 
+		@Test
+		void testFindAllGroups() {
+			// Preparazione: creo e salvo più gruppi
 
-            groupRepositoryPort.saveAndFlush(group1);
-            groupRepositoryPort.saveAndFlush(group2);
-            groupRepositoryPort.saveAndFlush(group3);
+			Group group1 = Group.builder().groupName("admin").build();
+			Group group2 = Group.builder().groupName("user").build();
+			Group group3 = Group.builder().groupName("guest").build();
 
-            // Azione: recupero tutti i gruppi
-            List<Group> allGroups = groupRepositoryPort.findAll();
+			groupRepositoryPort.saveAndFlush(group1);
+			groupRepositoryPort.saveAndFlush(group2);
+			groupRepositoryPort.saveAndFlush(group3);
 
-            // Verifica: controllo che tutti i gruppi siano stati recuperati
-            assertEquals(3, allGroups.size());
-            assertTrue(allGroups.stream().anyMatch(g -> g.getGroupName().equals("admin")));
-            assertTrue(allGroups.stream().anyMatch(g -> g.getGroupName().equals("user")));
-            assertTrue(allGroups.stream().anyMatch(g -> g.getGroupName().equals("guest")));
-        }
+			// Azione: recupero tutti i gruppi
+			List<Group> allGroups = groupRepositoryPort.findAll();
 
-        @Test
-        void testUpdateGroup() {
-            // Preparazione: creo e salvo un gruppo
-            Group group = Group.builder()
-                    .groupName("moderator")
-                    .build();
+			// Verifica: controllo che tutti i gruppi siano stati recuperati
+			assertEquals(3, allGroups.size());
+			assertTrue(allGroups.stream().anyMatch(g -> g.getGroupName().equals("admin")));
+			assertTrue(allGroups.stream().anyMatch(g -> g.getGroupName().equals("user")));
+			assertTrue(allGroups.stream().anyMatch(g -> g.getGroupName().equals("guest")));
+		}
 
-            groupRepositoryPort.save(group);
+		@Test
+		void testUpdateGroup() {
+			// Preparazione: creo e salvo un gruppo
+			Group group = Group.builder().groupName("moderator").build();
 
-            // Recupero il gruppo e aggiorno l'updatedAt
-            Optional<Group> savedGroupOpt = groupRepositoryPort.findById(
-                    "moderator");
-            assertTrue(savedGroupOpt.isPresent());
+			groupRepositoryPort.save(group);
 
-            Group savedGroup = savedGroupOpt.get();
-            LocalDateTime updatedTime = LocalDateTime.now().plusHours(1);
-            savedGroup.setUpdatedAt(updatedTime);
+			// Recupero il gruppo e aggiorno l'updatedAt
+			Optional<Group> savedGroupOpt = groupRepositoryPort.findById("moderator");
+			assertTrue(savedGroupOpt.isPresent());
 
-            // Azione: salvo le modifiche
-            Group updatedGroup = groupRepositoryPort.save(savedGroup);
+			Group savedGroup = savedGroupOpt.get();
+			LocalDateTime updatedTime = LocalDateTime.now().plusHours(1);
+			savedGroup.setUpdatedAt(updatedTime);
 
-            // Verifica: controllo che l'aggiornamento sia avvenuto
-            // correttamente
-            assertEquals(updatedTime, updatedGroup.getUpdatedAt());
+			// Azione: salvo le modifiche
+			Group updatedGroup = groupRepositoryPort.save(savedGroup);
 
-            // Recupero nuovamente per verificare la persistenza
-            Optional<Group> retrievedUpdatedOpt =
-                    groupRepositoryPort.findById("moderator");
-            assertTrue(retrievedUpdatedOpt.isPresent());
-            assertEquals(updatedTime, retrievedUpdatedOpt.get().getUpdatedAt());
-        }
+			// Verifica: controllo che l'aggiornamento sia avvenuto
+			// correttamente
+			assertEquals(updatedTime, updatedGroup.getUpdatedAt());
 
-        @Test
-        void testDeleteGroup() {
-            // Preparazione: creo e salvo un gruppo
-            Group group = Group.builder()
-                    .groupName("temporary")
-                    .build();
+			// Recupero nuovamente per verificare la persistenza
+			Optional<Group> retrievedUpdatedOpt = groupRepositoryPort.findById("moderator");
+			assertTrue(retrievedUpdatedOpt.isPresent());
+			assertEquals(updatedTime, retrievedUpdatedOpt.get().getUpdatedAt());
+		}
 
-            groupRepositoryPort.save(group);
+		@Test
+		void testDeleteGroup() {
+			// Preparazione: creo e salvo un gruppo
+			Group group = Group.builder().groupName("temporary").build();
 
-            // Verifica che il gruppo esista
-            assertTrue(groupRepositoryPort.existsById("temporary"));
+			groupRepositoryPort.save(group);
 
-            // Azione: elimino il gruppo
-            groupRepositoryPort.delete(group);
+			// Verifica che il gruppo esista
+			assertTrue(groupRepositoryPort.existsById("temporary"));
 
-            // Verifica: controllo che il gruppo sia stato eliminato
-            assertFalse(groupRepositoryPort.existsById("temporary"));
-        }
+			// Azione: elimino il gruppo
+			groupRepositoryPort.delete(group);
 
-        @Test
-        void testGroupCount() {
-            // Preparazione: creo e salvo più gruppi
-            LocalDateTime now = LocalDateTime.now();
+			// Verifica: controllo che il gruppo sia stato eliminato
+			assertFalse(groupRepositoryPort.existsById("temporary"));
+		}
 
-            Group group1 = Group.builder().groupName("role1").build();
-            Group group2 = Group.builder().groupName("role2").build();
+		@Test
+		void testGroupCount() {
+			// Preparazione: creo e salvo più gruppi
+			LocalDateTime now = LocalDateTime.now();
 
-            groupRepositoryPort.saveAndFlush(group1);
-            groupRepositoryPort.saveAndFlush(group2);
+			Group group1 = Group.builder().groupName("role1").build();
+			Group group2 = Group.builder().groupName("role2").build();
 
-            // Azione: conto i gruppi
-            long count = groupRepositoryPort.count();
+			groupRepositoryPort.saveAndFlush(group1);
+			groupRepositoryPort.saveAndFlush(group2);
 
-            // Verifica: controllo che il conteggio sia corretto
-            assertEquals(2, count);
+			// Azione: conto i gruppi
+			long count = groupRepositoryPort.count();
 
-            // Aggiungo un altro gruppo
-            Group group3 = Group.builder().groupName("role3").build();
-            group3.setCreatedAt(now);
-            group3.setUpdatedAt(now);
-            groupRepositoryPort.saveAndFlush(group3);
+			// Verifica: controllo che il conteggio sia corretto
+			assertEquals(2, count);
 
-            // Verifico che il conteggio sia aggiornato
-            assertEquals(3, groupRepositoryPort.count());
-        }
-    }
+			// Aggiungo un altro gruppo
+			Group group3 = Group.builder().groupName("role3").build();
+			group3.setCreatedAt(now);
+			group3.setUpdatedAt(now);
+			groupRepositoryPort.saveAndFlush(group3);
 
-    @Nested
-    @Transactional(propagation = Propagation.NOT_SUPPORTED)
-    class ConcurrencyTest {
-        @Test
-        void testOptimisticLocking() {
-            Group group = Group.builder().groupName("marketing").build();
-            groupRepositoryPort.saveAndFlush(group); // flush per avere version iniziale
+			// Verifico che il conteggio sia aggiornato
+			assertEquals(3, groupRepositoryPort.count());
+		}
 
-            Group g1 = entityManager.find(Group.class, "marketing");
-            entityManager.detach(g1);
+	}
 
-            Group g2 = entityManager.find(Group.class, "marketing");
-            entityManager.detach(g2);
+	@Nested
+	@Transactional(propagation = Propagation.NOT_SUPPORTED)
+	class ConcurrencyTest {
 
-            g1.setUpdatedAt(LocalDateTime.now());
-            groupRepositoryPort.saveAndFlush(g1); // OK, version +1
+		@Test
+		void testOptimisticLocking() {
+			Group group = Group.builder().groupName("marketing").build();
+			groupRepositoryPort.saveAndFlush(group); // flush per avere version iniziale
 
-            g2.setUpdatedAt(LocalDateTime.now());
-            assertThrows(ObjectOptimisticLockingFailureException.class, () -> {
-                groupRepositoryPort.saveAndFlush(g2); // fallisce: version non aggiornata
-            });
-        }
-    }
+			Group g1 = entityManager.find(Group.class, "marketing");
+			entityManager.detach(g1);
 
-    @Nested
-    class AuditFieldsTest {
-        @Test
-        void testCreatedAtAndUpdatedAtAreSet() {
-            Group group = Group.builder()
-                    .groupName("Admins")
-                    .build();
+			Group g2 = entityManager.find(Group.class, "marketing");
+			entityManager.detach(g2);
 
-            Group saved = groupRepositoryPort.save(group);
-            assertNotNull(saved.getCreatedAt());
-            assertNotNull(saved.getUpdatedAt());
-        }
-    }
+			g1.setUpdatedAt(LocalDateTime.now());
+			groupRepositoryPort.saveAndFlush(g1); // OK, version +1
+
+			g2.setUpdatedAt(LocalDateTime.now());
+			assertThrows(ObjectOptimisticLockingFailureException.class, () -> {
+				groupRepositoryPort.saveAndFlush(g2); // fallisce: version non aggiornata
+			});
+		}
+
+	}
+
+	@Nested
+	class AuditFieldsTest {
+
+		@Test
+		void testCreatedAtAndUpdatedAtAreSet() {
+			Group group = Group.builder().groupName("Admins").build();
+
+			Group saved = groupRepositoryPort.save(group);
+			assertNotNull(saved.getCreatedAt());
+			assertNotNull(saved.getUpdatedAt());
+		}
+
+	}
+
 }

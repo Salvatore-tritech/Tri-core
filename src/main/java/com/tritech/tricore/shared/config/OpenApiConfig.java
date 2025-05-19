@@ -10,10 +10,9 @@ public class OpenApiConfig {
 
 	@Bean
 	public OpenAPI customOpenAPI() {
-		return new OpenAPI().info(new Info().title("Google OpenID Connect Demo API")
-			.description(
-					"API di esempio per dimostrare " + "l'integrazione di Google OpenID Connect con " + "Spring Boot")
-			.version("1.0.0"));
+		return new OpenAPI().info(new Info().title("Tri-Core API")
+			.version("1.0.0")
+			.description("Documentazione API del sistema Tri-Core. Accedi tramite Google per autorizzare."));
 	}
 
 }

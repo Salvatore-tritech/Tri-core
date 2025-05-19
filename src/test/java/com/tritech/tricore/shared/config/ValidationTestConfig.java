@@ -7,8 +7,9 @@ import org.springframework.context.annotation.Bean;
 @TestConfiguration
 public class ValidationTestConfig {
 
-    @Bean
-    public jakarta.validation.Validator validator() {
-        return Validation.buildDefaultValidatorFactory().getValidator();
-    }
+	@Bean
+	public jakarta.validation.Validator validator() {
+		return Validation.buildDefaultValidatorFactory().getValidator();
+	}
+
 }

@@ -1,4 +1,4 @@
-package com.tritech.tricore.adapter.input.web;
+package com.tritech.tricore.core.port.input;
 
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
