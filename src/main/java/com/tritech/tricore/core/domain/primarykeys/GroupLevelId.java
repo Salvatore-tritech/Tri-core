@@ -7,13 +7,16 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * Represents a composite key for the `GroupLevel` entity.
+ * Represents a composite key for the
+ * {@link com.tritech.tricore.core.domain.GroupLevel GroupLevel} entity.
  * <p>
- * This class is used to uniquely identify a `GroupLevel` entity through a
+ * This class is used to uniquely identify a {@link com.tritech.tricore.core.domain.GroupLevel GroupLevel} entity
+ * through a
  * combination of the following fields:
+ * </p>
  * <ul>
- *     <li>`groupName`: The name of the group associated with the level.</li>
- *     <li>`levelName`: The name of the level within the group.</li>
+ *     <li>{@code groupName}: The name of the group associated with the level.</li>
+ *     <li>{@code levelName}: The name of the level within the group.</li>
  * </ul>
  */
 @Data
