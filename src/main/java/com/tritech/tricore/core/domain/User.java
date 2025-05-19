@@ -2,15 +2,18 @@ package com.tritech.tricore.core.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * <p>Represents a user entity within the system. This class is mapped to the
@@ -28,6 +31,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class User {
 
     /**
@@ -55,6 +59,7 @@ public class User {
      * field is mapped to the "email" column in the database and is a required
      * attribute.
      */
+    @Email(message = "Invalid email address")
     @Column(name = "email", nullable = false)
     private String email;
 

@@ -3,6 +3,7 @@ package com.tritech.tricore.core.domain;
 import com.tritech.tricore.core.domain.primarykeys.GroupLevelId;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Id;
@@ -15,8 +16,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * Represents a group level entity within the system. This class is mapped to
@@ -51,6 +55,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @IdClass(GroupLevelId.class)
+@EntityListeners(AuditingEntityListener.class)
 public class GroupLevel {
 
     /**
@@ -115,11 +120,15 @@ public class GroupLevel {
      * <p>
      * The association is lazy-loaded, meaning the `Group` entity data is
      * fetched from the database only when it is explicitly accessed.
+     * <p>
+     * If a Group in the `Group` entity is deleted, all associated GroupLevels
+     * will be automatically deleted in cascade.
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_name", referencedColumnName = "group_name",
             foreignKey = @ForeignKey(name = "fk_group_level_group"),
             insertable = false, updatable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Group group;
 
 }
