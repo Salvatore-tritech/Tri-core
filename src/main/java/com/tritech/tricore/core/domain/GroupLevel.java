@@ -23,30 +23,32 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * Represents a group level entity within the system. This class is mapped to
- * the "group_levels" table in the database.
+ * Represents a {@code GroupLevel} entity within the system.
  * <p>
- * A GroupLevel is uniquely identified by a combination of the following
- * fields:
+ * This class is mapped to the {@code group_levels} table in the database.
+ * </p>
+ * <p>
+ * A GroupLevel is uniquely identified by a combination of the following fields:
+ * </p>
  * <ul>
- *     <li>groupName: The name of the group associated with this level.</li>
- *     <li>levelName: The name of the level within the group.</li>
+ *     <li>{@code groupName}: The name of the group associated with this level.</li>
+ *     <li>{@code levelName}: The name of the level within the group.</li>
  * </ul>
  * <p>
  * This class includes the following:
+ * </p>
  * <ul>
- *     <li>Technical fields for database versioning
- *     and audit tracking, such as createdAt
- *     and updatedAt timestamps, and a version
+ *     <li>Technical fields for database versioning and audit tracking, such as
+ *     {@code createdAt} and {@code updatedAt} timestamps, and a {@code version}
  *     field for optimistic locking.</li>
- *     <li>A relationship to the `Group` entity,
- *     which establishes an association with
- *     the group that this level belongs to.</li>
+ *     <li>A relationship to the {@link Group} entity, which establishes an
+ *     association
+ *     with the group that this level belongs to.</li>
  * </ul>
  * <p>
- * This entity uses a composite key defined by
- * the `GroupLevelId` class for its unique
- * identification.
+ * This entity uses a composite key defined by the {@code GroupLevelId} class
+ * for its unique identification.
+ * </p>
  */
 @Entity
 @Table(name = "group_levels")
@@ -59,25 +61,33 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class GroupLevel {
 
     /**
-     * Represents the name of the group associated with the group level. This
-     * field is a part of the composite primary key for the `GroupLevel` entity
-     * and establishes a relationship with the `Group` entity.
+     * Represents the name of the group associated with the group level.
      * <p>
-     * It is mapped to the "group_name" column in the "group_levels" table and
-     * must not be null.
+     * This field is a part of the composite primary key for the {@code GroupLevel} entity
+     * and establishes a relationship with the {@link Group} entity.
+     * </p>
+     *
+     * <p>
+     * It is mapped to the {@code group_name} column in the {@code group_levels} table
+     * and must not be {@code null}.
+     * </p>
      */
     @Id
     @Column(name = "group_name", nullable = false)
     private String groupName;
 
     /**
-     * Represents the name of the level within a group. This field is a part of
-     * the composite primary key for the `GroupLevel` entity and is used in
-     * combination with the `groupName` field to uniquely identify a group
-     * level.
+     * Represents the name of the level within a group.
      * <p>
-     * It is mapped to the "level_name" column in the "group_levels" table and
-     * must not be null.
+     * This field is a part of the composite primary key for the {@code GroupLevel} entity
+     * and is used in combination with the {@code groupName} field to uniquely identify
+     * a group level.
+     * </p>
+     *
+     * <p>
+     * It is mapped to the {@code level_name} column in the {@code group_levels} table
+     * and must not be {@code null}.
+     * </p>
      */
     @Id
     @Column(name = "level_name", nullable = false)
@@ -86,9 +96,11 @@ public class GroupLevel {
     // Technical Fields
 
     /**
-     * Represents the version of the entity for optimistic locking purposes.
-     * This field is used by the persistence framework to ensure consistency and
-     * prevent concurrent update conflicts during database transactions.
+     * Represents the version of the entity used for optimistic locking purposes.
+     * <p>
+     * This field is managed by the persistence framework to ensure data consistency
+     * and prevent concurrent update conflicts during database transactions.
+     * </p>
      */
     @Version
     private Long version;
@@ -114,15 +126,17 @@ public class GroupLevel {
     // Relations
 
     /**
-     * This field defines a many-to-one association between `GroupLevel` and
-     * `Group`, where multiple `GroupLevel` entities can be associated with a
-     * single `Group`.
+     * This field defines a many-to-one association between {@code GroupLevel} and
+     * {@code Group}, where multiple {@code GroupLevel} entities can be associated with a
+     * single {@code Group}.
      * <p>
-     * The association is lazy-loaded, meaning the `Group` entity data is
+     * The association is lazy-loaded, meaning the {@code Group} entity data is
      * fetched from the database only when it is explicitly accessed.
+     * </p>
      * <p>
-     * If a Group in the `Group` entity is deleted, all associated GroupLevels
-     * will be automatically deleted in cascade.
+     * If a {@code Group} in the {@code Group} entity is deleted, all associated {@code GroupLevel}
+     * entities will be automatically deleted in cascade.
+     * </p>
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_name", referencedColumnName = "group_name",
