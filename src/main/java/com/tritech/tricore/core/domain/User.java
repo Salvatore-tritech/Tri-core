@@ -21,13 +21,13 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * This class is mapped to the {@code users} table in the database.
  * </p>
  * <p>
- * Each user is uniquely identified by a subject ID (obtained from Google
- * OpenID Connect) and contains additional attributes such as full name,
- * email address, and profile picture.
+ * Each user is uniquely identified by a subject ID (obtained from Google OpenID Connect)
+ * and contains additional attributes such as full name, email address, and profile
+ * picture.
  * </p>
  * <p>
- * Includes technical fields for database versioning and audit tracking, such as
- * created and updated timestamps.
+ * Includes technical fields for database versioning and audit tracking, such as created
+ * and updated timestamps.
  * </p>
  */
 @Entity
@@ -39,85 +39,84 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class User {
 
-    /**
-     * Represents the unique identifier for a user within the system.
-     * <p>
-     * This field is mapped to the {@code subject} column in the {@code users} table and serves
-     * as the primary key for the {@code User} entity.
-     * </p>
-     * <p>
-     * The subject is obtained from Google OpenID Connect and ensures that each
-     * user is uniquely identifiable within the system.
-     * </p>
-     */
-    @Id
-    @Column(name = "subject", nullable = false, unique = true)
-    private Long subject;
+	/**
+	 * Represents the unique identifier for a user within the system.
+	 * <p>
+	 * This field is mapped to the {@code subject} column in the {@code users} table and
+	 * serves as the primary key for the {@code User} entity.
+	 * </p>
+	 * <p>
+	 * The subject is obtained from Google OpenID Connect and ensures that each user is
+	 * uniquely identifiable within the system.
+	 * </p>
+	 */
+	@Id
+	@Column(name = "subject", nullable = false, unique = true)
+	private Long subject;
 
-    /**
-     * Represents the full name of a user within the system.
-     * <p>
-     * This field is mapped to the {@code fullname} column in the {@code users} table
-     * and is a required attribute, as specified by the non-null constraint.
-     * </p>
-     */
-    @Column(name = "fullname", nullable = false)
-    private String fullname;
+	/**
+	 * Represents the full name of a user within the system.
+	 * <p>
+	 * This field is mapped to the {@code fullname} column in the {@code users} table and
+	 * is a required attribute, as specified by the non-null constraint.
+	 * </p>
+	 */
+	@Column(name = "fullname", nullable = false)
+	private String fullname;
 
-    /**
-     * Represents the email address associated with a user in the system.
-     * <p>
-     * This field is mapped to the {@code email} column in the database
-     * and is a required attribute.
-     * </p>
-     */
-    @Email(message = "Invalid email address")
-    @Column(name = "email", nullable = false)
-    private String email;
+	/**
+	 * Represents the email address associated with a user in the system.
+	 * <p>
+	 * This field is mapped to the {@code email} column in the database and is a required
+	 * attribute.
+	 * </p>
+	 */
+	@Email(message = "Invalid email address")
+	@Column(name = "email", nullable = false)
+	private String email;
 
-    /**
-     * Represents the profile picture associated with a user within the system.
-     * <p>
-     * This field is mapped to the {@code picture} column in the {@code users} table in the
-     * database.
-     * </p>
-     * <p>
-     * The picture attribute is expected to store the URL or path of the user's
-     * profile picture, enabling its retrieval and display in the system's user
-     * interface.
-     * </p>
-     * <p>
-     * The picture URL is obtained via Google OpenID Connect.
-     * </p>
-     */
-    @Column(name = "picture")
-    private String picture;
+	/**
+	 * Represents the profile picture associated with a user within the system.
+	 * <p>
+	 * This field is mapped to the {@code picture} column in the {@code users} table in
+	 * the database.
+	 * </p>
+	 * <p>
+	 * The picture attribute is expected to store the URL or path of the user's profile
+	 * picture, enabling its retrieval and display in the system's user interface.
+	 * </p>
+	 * <p>
+	 * The picture URL is obtained via Google OpenID Connect.
+	 * </p>
+	 */
+	@Column(name = "picture")
+	private String picture;
 
-    // Technical Fields
+	// Technical Fields
 
-    /**
-     * Represents the version of the entity for optimistic locking purposes.
-     * This field is used by the persistence framework to ensure consistency and
-     * prevent concurrent update conflicts during database transactions.
-     */
-    @Version
-    private Long version;
+	/**
+	 * Represents the version of the entity for optimistic locking purposes. This field is
+	 * used by the persistence framework to ensure consistency and prevent concurrent
+	 * update conflicts during database transactions.
+	 */
+	@Version
+	private Long version;
 
-    /**
-     * Represents the creation timestamp of the entity. This field is
-     * automatically populated with the date and time when the entity is
-     * persisted for the first time.
-     */
-    @Column(name = "created_at", nullable = false, updatable = false)
-    @CreatedDate
-    private java.time.LocalDateTime createdAt;
+	/**
+	 * Represents the creation timestamp of the entity. This field is automatically
+	 * populated with the date and time when the entity is persisted for the first time.
+	 */
+	@Column(name = "created_at", nullable = false, updatable = false)
+	@CreatedDate
+	private java.time.LocalDateTime createdAt;
 
-    /**
-     * Represents the timestamp of the last modification made to the entity.
-     * This field is automatically updated with the current date and time
-     * whenever the entity is updated in the database.
-     */
-    @Column(name = "updated_at")
-    @LastModifiedDate
-    private java.time.LocalDateTime updatedAt;
+	/**
+	 * Represents the timestamp of the last modification made to the entity. This field is
+	 * automatically updated with the current date and time whenever the entity is updated
+	 * in the database.
+	 */
+	@Column(name = "updated_at")
+	@LastModifiedDate
+	private java.time.LocalDateTime updatedAt;
+
 }
